@@ -2,18 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3232219c-b2a4-4806-87bc-eecad22abf58" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Mover.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/NodeInput.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/NodeOutput.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/connector.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Analyzer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Analyzer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BiquadFilter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/BiquadFilter.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Destination.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Destination.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sequencer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sequencer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SimpleOscillator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/SimpleOscillator.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mover.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mover.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Nodes/AnalyzerNode.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Nodes/AnalyzerNode.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Nodes/BiquadFilterNode.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Nodes/BiquadFilterNode.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Nodes/DestinationNode.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Nodes/DestinationNode.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Nodes/SequencerNode.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Nodes/SequencerNode.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Nodes/SimpleOscillatorNode.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Nodes/SimpleOscillatorNode.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SynthGrid.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/SynthGrid.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SynthNode.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/SynthNode.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grid-config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/grid-config.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

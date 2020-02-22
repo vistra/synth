@@ -95,6 +95,7 @@ export class SynthGrid extends React.Component<TProps, any> {
     onNodeChange = (changedNode: SynthNodeConfig<unknown>) => {
         this.gridConfig.nodes = this.gridConfig.nodes.map(node => node.id == changedNode.id ? _.clone(changedNode) : node);
         this.props.onChange(this.gridConfig);
+        this.forceUpdate();
     };
 
     onConnectionChange = (outputId: string, outputName: string, inputId: string, inputName: string, action: "add"|"remove") => {

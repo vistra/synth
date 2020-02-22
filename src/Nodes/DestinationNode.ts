@@ -18,6 +18,8 @@ export class DestinationNode implements SynthAudioNode {
             type: 'Destination',
             inputs: ['input'],
             outputs: [],
+            top: 0,
+            left: 0,
             settings: {}
         })
     }

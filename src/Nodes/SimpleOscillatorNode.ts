@@ -64,6 +64,8 @@ export class SimpleOscillatorNode implements SynthAudioNode {
             type: 'SimpleOscillator',
             inputs: ['gain', 'detune'],
             outputs: ['output'],
+            top: 0,
+            left: 0,
             settings: {
                 type: 'sine',
                 freq: 200,

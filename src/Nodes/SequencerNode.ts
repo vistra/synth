@@ -55,6 +55,8 @@ export class SequencerNode implements SynthAudioNode {
             type: 'Sequencer',
             inputs: [],
             outputs: ['gain', 'detune'],
+            top: 0,
+            left: 0,
             settings: {
                 slots: [
                     {value: 5, count: 1, gainPreset: 'quarter', transition: 'linear', offset: 0},

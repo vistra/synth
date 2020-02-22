@@ -57,6 +57,8 @@ export interface SynthNodeConfig<TSettings=NodeSettings> {
     inputs: string[],
     outputs: string[],
     settings: TSettings
+    top: number,
+    left: number
 }
 
 export interface NodeConnection {

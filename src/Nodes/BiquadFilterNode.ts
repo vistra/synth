@@ -45,6 +45,8 @@ export class BiquadFilterNode implements SynthAudioNode {
             type: 'BiquadFilter',
             inputs: ['input'],
             outputs: ['output'],
+            top: 0,
+            left: 0,
             settings: {
                 type: 'lowpass',
                 Q: 0,

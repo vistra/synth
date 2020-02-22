@@ -18,6 +18,8 @@ export class AnalyzerNode implements SynthAudioNode {
             type: 'Analyzer',
             inputs: ['input'],
             outputs: [],
+            top: 0,
+            left: 0,
             settings: {}
         })
     }

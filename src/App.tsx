@@ -7,7 +7,7 @@ import {SimpleOscillator} from "./SimpleOscillator";
 import {BiquadFilter} from "./BiquadFilter";
 import {Sequencer} from "./Sequencer";
 import {SynthGrid} from "./SynthGrid";
-import {NodeConnection, SynthNodeConfig} from "./grid-config";
+import {NodeConnection, NodeType, SynthNodeConfig} from "./grid-config";
 import {DestinationNode} from "./Nodes/DestinationNode";
 
 class App extends React.Component {
@@ -138,6 +138,8 @@ class App extends React.Component {
                     {
                         "id": "destination_0",
                         "type": "Destination",
+                        "top": 28,
+                        "left": 6,
                         "inputs": [
                             "input"
                         ],
@@ -147,6 +149,8 @@ class App extends React.Component {
                     {
                         "id": "SimpleOscillator_1",
                         "type": "SimpleOscillator",
+                        "top": 242,
+                        "left": 830,
                         "inputs": [],
                         "outputs": [
                             "output"
@@ -161,6 +165,8 @@ class App extends React.Component {
                     {
                         "id": "BiquadFilter_2",
                         "type": "BiquadFilter",
+                        "top": 261,
+                        "left": 547,
                         "inputs": [
                             "input"
                         ],
@@ -177,6 +183,8 @@ class App extends React.Component {
                     {
                         "id": "Analyzer_3",
                         "type": "Analyzer",
+                        "top": 26,
+                        "left": 418,
                         "inputs": [
                             "input"
                         ],
@@ -186,6 +194,8 @@ class App extends React.Component {
                     {
                         "id": "Sequencer_4",
                         "type": "Sequencer",
+                        "top": 457,
+                        "left": 42,
                         "inputs": [],
                         "outputs": [
                             "gain",
@@ -284,7 +294,7 @@ class App extends React.Component {
                         "fromOutputName": "output",
                         "toNodeId": "destination_0",
                         "toInputName": "input"
-                    },
+                    }
                 ]
             }
             } onChange={(p)=>console.log(JSON.stringify(p, null, 2))}/>
