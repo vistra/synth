@@ -17,6 +17,7 @@ import {SimpleOscillatorNode} from "./Nodes/SimpleOscillatorNode";
 import {AnalyzerNode} from "./Nodes/AnalyzerNode";
 import {SynthAudioNode} from "./Nodes/SynthAudioNode";
 import {DestinationNode} from "./Nodes/DestinationNode";
+import {Connector} from "./connector";
 
 const INITIAL_GRID: GridConfig = {
     width: 500,
@@ -33,14 +34,33 @@ export class SynthGrid extends React.Component<TProps, any> {
     private gridConfig: GridConfig;
     private audioCtx: AudioContext;
     private nodes: {[id: string]: SynthAudioNode};
+    private connector: Connector;
 
     constructor(props: TProps) {
         super(props);
         this.gridConfig = props.gridConfig || INITIAL_GRID;
         this.buildNodes();
+        this.connector = new Connector(
+            () => this.gridConfig.connections,
+            (toNodeId: string, inputName: string) => {
+                this.gridConfig.connections = this.gridConfig.connections.filter(c => c.toNodeId != toNodeId || c.toInputName != inputName)
+                this.buildNodes();
+            },
+            (fromNodeId: string, outputName: string, toNodeId: string, inputName: string) => {
+                this.gridConfig.connections = this.gridConfig.connections.filter(
+                    c => c.fromNodeId != fromNodeId || c.fromOutputName != outputName || c.toNodeId != toNodeId || c.toInputName != inputName
+                ).concat([{
+                    fromNodeId,
+                    fromOutputName: outputName,
+                    toNodeId,
+                    toInputName: inputName
+                }]);
+                this.buildNodes();
+            }
+        );
     }
 
-    buildNodes() {
+    buildNodes = () => {
         if (this.audioCtx) {
             this.audioCtx.close();
         }
@@ -148,6 +168,7 @@ export class SynthGrid extends React.Component<TProps, any> {
                     node={this.nodes[nodeCfg.id]}
                     onChange={this.onNodeChange}
                     onConnectionChange={(outputName: string, inputId: string, inputName: string, action:"add"|"remove") => this.onConnectionChange(nodeCfg.id, outputName, inputId, inputName, action)}
+                    connector={this.connector}
                 />)}
             </div>
 

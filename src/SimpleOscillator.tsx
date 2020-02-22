@@ -3,12 +3,15 @@ import * as _ from 'lodash';
 import {SimpleOscillatorSettings, SynthNodeConfig} from "./grid-config";
 import {SynthAudioNode} from "./Nodes/SynthAudioNode";
 import {SimpleOscillatorNode} from "./Nodes/SimpleOscillatorNode";
+import {Connector} from "./connector";
+import {NodeInput} from "./NodeInput";
+import {NodeOutput} from "./NodeOutput";
 
 interface Props {
     config: SynthNodeConfig<SimpleOscillatorSettings>,
     node: SimpleOscillatorNode,
     onChange: (config: SynthNodeConfig<SimpleOscillatorSettings>) => void
-    onConnectionChange: (outputName: string, inputId: string, inputName: string, action:"add"|"remove") => void
+    connector: Connector;
 }
 export class SimpleOscillator extends React.Component<Props, any> {
 
@@ -26,6 +29,9 @@ export class SimpleOscillator extends React.Component<Props, any> {
             </div>
             <div>Gain:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="range" min="0" max="100" value={this.props.node.config.settings.gain} onChange={(e) => this.onGainChange(e.target.value)}/></div>
             <div>Delay:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="range" min="0" max="100" value={this.props.node.config.settings.delay} onChange={(e) => this.onPhaseChange(e.target.value)}/></div>
+            <NodeInput connector={this.props.connector} name={"detune"} nodeId={this.props.config.id}/>
+            <NodeInput connector={this.props.connector} name={"gain"} nodeId={this.props.config.id}/>
+            <NodeOutput connector={this.props.connector} name={"output"} nodeId={this.props.config.id}/>
         </div>
     }
 

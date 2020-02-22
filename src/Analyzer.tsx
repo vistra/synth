@@ -1,12 +1,15 @@
 import React from 'react';
 import {AnalyzerSettings, SimpleOscillatorSettings, SynthNodeConfig} from "./grid-config";
 import {AnalyzerNode} from "./Nodes/AnalyzerNode";
+import {Connector} from "./connector";
+import {NodeOutput} from "./NodeOutput";
+import {NodeInput} from "./NodeInput";
 
 interface Props {
     config: SynthNodeConfig<AnalyzerSettings>,
     node: AnalyzerNode,
     onChange: (config: SynthNodeConfig<SimpleOscillatorSettings>) => void
-    onConnectionChange: (outputName: string, inputId: string, inputName: string, action:"add"|"remove") => void
+    connector: Connector;
 }
 export class Analyzer extends React.Component<Props, any> {
 
@@ -22,6 +25,7 @@ export class Analyzer extends React.Component<Props, any> {
         return <div>
             <canvas ref={(e) => this.waveCanvas = e} height={200} width={400} style={{border: "1px solid"}}/>
             <canvas ref={(e) => this.freqCanvas = e} height={200} width={400} style={{border: "1px solid"}}/>
+            <NodeInput connector={this.props.connector} name={"input"} nodeId={this.props.config.id}/>
         </div>
     }
 

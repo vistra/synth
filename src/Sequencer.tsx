@@ -2,6 +2,9 @@ import React from 'react';
 
 import {SequencerNode} from "./Nodes/SequencerNode";
 import {SequencerSettings, SequencerSlot, SynthNodeConfig} from "./grid-config";
+import {Connector} from "./connector";
+import {NodeInput} from "./NodeInput";
+import {NodeOutput} from "./NodeOutput";
 
 const GAIN_PRESETS = {
     full: [],
@@ -55,7 +58,7 @@ interface Props {
     config: SynthNodeConfig<SequencerSettings>,
     node: SequencerNode,
     onChange: (config: SynthNodeConfig<SequencerSettings>) => void
-    onConnectionChange: (outputName: string, inputId: string, inputName: string, action:"add"|"remove") => void
+    connector: Connector;
 }
 export class Sequencer extends React.Component<Props, any> {
 
@@ -108,6 +111,8 @@ export class Sequencer extends React.Component<Props, any> {
                 {/*<button onClick={() => {this.slots.push({value:0, count: 1, gainPreset: 'full'}); this.update()}}>+</button>*/}
             </div>
             <input value={this.tickEvery} onChange={(e) => { this.props.node.setTickEvery(parseFloat(e.target.value) || 0.5);}}/>
+            <NodeOutput connector={this.props.connector} name={"detune"} nodeId={this.props.config.id}/>
+            <NodeOutput connector={this.props.connector} name={"gain"} nodeId={this.props.config.id}/>
         </div>
     }
 

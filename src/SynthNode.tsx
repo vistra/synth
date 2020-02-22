@@ -17,12 +17,14 @@ import {SequencerNode} from "./Nodes/SequencerNode";
 import {AnalyzerNode} from "./Nodes/AnalyzerNode";
 import {DestinationNode} from "./Nodes/DestinationNode";
 import {Destination} from "./Destination";
+import {Connector} from "./connector";
 
 interface TProps {
     config: SynthNodeConfig,
     node: SynthAudioNode,
     onChange: (config: SynthNodeConfig<unknown>) => void
     onConnectionChange: (outputName: string, inputId: string, inputName: string, action:"add"|"remove") => void
+    connector: Connector
 }
 export class SynthNode extends React.Component<TProps> {
 
@@ -37,31 +39,31 @@ export class SynthNode extends React.Component<TProps> {
                 config={config as SynthNodeConfig<BiquadFilterSettings>}
                 node={node as BiquadFilterNode}
                 onChange={this.onChange}
-                onConnectionChange={this.props.onConnectionChange}
+                connector={this.props.connector}
                 />
             : type == 'SimpleOscillator' ? <SimpleOscillator
                     config={config as SynthNodeConfig<SimpleOscillatorSettings>}
                     node={node as SimpleOscillatorNode}
                     onChange={this.onChange}
-                    onConnectionChange={this.props.onConnectionChange}
+                    connector={this.props.connector}
                 />
             : type == 'Analyzer' ? <Analyzer
                 config={config as SynthNodeConfig<AnalyzerSettings>}
                 node={node as AnalyzerNode}
                 onChange={this.onChange}
-                onConnectionChange={this.props.onConnectionChange}
+                connector={this.props.connector}
                 />
             : type == 'Sequencer' ? <Sequencer
                 config={config as SynthNodeConfig<SequencerSettings>}
                 node={node as SequencerNode}
                 onChange={this.onChange}
-                onConnectionChange={this.props.onConnectionChange}
+                connector={this.props.connector}
                 />
             : type == 'Destination' ? <Destination
                 config={config as SynthNodeConfig<DestinationSettings>}
                 node={node as DestinationNode}
                 onChange={this.onChange}
-                onConnectionChange={this.props.onConnectionChange}
+                connector={this.props.connector}
                 />
             : <div>Unsupported node type :(</div>;
     }

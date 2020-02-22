@@ -2,12 +2,15 @@ import React from 'react';
 import * as _ from 'lodash';
 import {BiquadFilterSettings, SynthNodeConfig} from "./grid-config";
 import {BiquadFilterNode} from "./Nodes/BiquadFilterNode";
+import {Connector} from "./connector";
+import {NodeOutput} from "./NodeOutput";
+import {NodeInput} from "./NodeInput";
 
 interface TProps {
     config: SynthNodeConfig<BiquadFilterSettings>,
     node: BiquadFilterNode,
     onChange: (config: SynthNodeConfig<BiquadFilterSettings>) => void,
-    onConnectionChange: (outputName: string, inputId: string, inputName: string, action:"add"|"remove") => void
+    connector: Connector;
 }
 export class BiquadFilter extends React.Component<TProps, {}> {
 
@@ -34,6 +37,8 @@ export class BiquadFilter extends React.Component<TProps, {}> {
             </div>
             <div>Gain:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="range" min="0" max="100" value={this.props.node.config.settings.gain} onChange={(e) => this.onGainChange(e.target.value)}/></div>
             <div>Q:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="range" min="0" max="100" value={this.props.node.config.settings.Q} onChange={(e) => this.onQChange(e.target.value)}/></div>
+            <NodeInput connector={this.props.connector} name={"input"} nodeId={this.props.config.id}/>
+            <NodeOutput connector={this.props.connector} name={"output"} nodeId={this.props.config.id}/>
         </div>
     }
 
