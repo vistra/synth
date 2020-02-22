@@ -57,7 +57,7 @@ export class BiquadFilterNode implements SynthAudioNode {
     }
 
     pack() {
-        return _.clone(this.config);
+        return _.cloneDeep(this.config);
     }
 
     getInput(name: 'input') {

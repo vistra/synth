@@ -27,7 +27,7 @@ export class SimpleOscillatorNode implements SynthAudioNode {
     }
 
     pack() {
-        return _.clone(this.config);
+        return _.cloneDeep(this.config);
     }
 
     setType(type: SimpleOscillatorSettings["type"]) {

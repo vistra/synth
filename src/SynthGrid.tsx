@@ -35,16 +35,20 @@ export class SynthGrid extends React.Component<TProps, any> {
     private audioCtx: AudioContext;
     private nodes: {[id: string]: SynthAudioNode};
     private connector: Connector;
+    private history: GridConfig[] = [];
+    private future: GridConfig[] = [];
 
     constructor(props: TProps) {
         super(props);
         this.gridConfig = props.gridConfig || INITIAL_GRID;
+        this.history=[_.cloneDeep(this.gridConfig)];
         this.buildNodes();
         this.connector = new Connector(
             () => this.gridConfig.connections,
             (toNodeId: string, inputName: string) => {
                 this.gridConfig.connections = this.gridConfig.connections.filter(c => c.toNodeId != toNodeId || c.toInputName != inputName)
-                this.buildNodes();
+                this.configChanged(this.gridConfig, true);
+                this.future = [];
             },
             (fromNodeId: string, outputName: string, toNodeId: string, inputName: string) => {
                 this.gridConfig.connections = this.gridConfig.connections.filter(
@@ -55,7 +59,8 @@ export class SynthGrid extends React.Component<TProps, any> {
                     toNodeId,
                     toInputName: inputName
                 }]);
-                this.buildNodes();
+                this.configChanged(this.gridConfig, true);
+                this.future = [];
             }
         );
     }
@@ -92,10 +97,36 @@ export class SynthGrid extends React.Component<TProps, any> {
         this.forceUpdate();
     }
 
-    onNodeChange = (changedNode: SynthNodeConfig<unknown>) => {
-        this.gridConfig.nodes = this.gridConfig.nodes.map(node => node.id == changedNode.id ? _.clone(changedNode) : node);
+    private configChanged(config: GridConfig, buildNodes: boolean) {
+        this.gridConfig = config;
+        this.history.push(_.cloneDeep(config));
         this.props.onChange(this.gridConfig);
+        if (buildNodes) {
+            this.buildNodes();
+        }
         this.forceUpdate();
+    }
+
+    private undo() {
+        if (this.history.length > 1) {
+            let cfg = this.history.pop();
+            this.future = [_.cloneDeep(cfg)].concat(this.future);
+            cfg = this.history.pop();
+            this.configChanged(cfg, true);
+        }
+    }
+
+    private redo() {
+        if (this.future.length > 0) {
+            const cfg = this.future.splice(0,1)[0];
+            this.configChanged(cfg, true);
+        }
+    }
+
+    onNodeChange = (changedNode: SynthNodeConfig<unknown>) => {
+        this.gridConfig.nodes = this.gridConfig.nodes.map(node => node.id == changedNode.id ? _.cloneDeep(changedNode) : node);
+        this.future = [];
+        this.configChanged(this.gridConfig, false);
     };
 
     onConnectionChange = (outputId: string, outputName: string, inputId: string, inputName: string, action: "add"|"remove") => {
@@ -111,8 +142,8 @@ export class SynthGrid extends React.Component<TProps, any> {
                 toNodeId: inputId,
                 toInputName: inputName
             }] : []);
-        this.buildNodes();
-        this.props.onChange(this.gridConfig);
+        this.configChanged(this.gridConfig, true);
+        this.future = [];
     };
 
     newNode(type: NodeType) {
@@ -127,8 +158,8 @@ export class SynthGrid extends React.Component<TProps, any> {
             throw new Error(`Unsupported node type: ${type}`)
         }
         this.gridConfig.nodes.push(node.pack());
-        this.buildNodes();
-        this.props.onChange(this.gridConfig);
+        this.configChanged(this.gridConfig, true);
+        this.future = [];
     }
 
     getNodeInputs(nodeConfig: SynthNodeConfig<unknown>): {inputName: string, input: any}[] {
@@ -160,7 +191,7 @@ export class SynthGrid extends React.Component<TProps, any> {
     }
 
     render() {
-        const { gridConfig } = this.props;
+        const { gridConfig } = this;
         return <div style={{width: gridConfig.width, height: gridConfig.height}}>
             <div>
                 {gridConfig.nodes.map(nodeCfg => <SynthNode
@@ -168,7 +199,6 @@ export class SynthGrid extends React.Component<TProps, any> {
                     config={nodeCfg}
                     node={this.nodes[nodeCfg.id]}
                     onChange={this.onNodeChange}
-                    onConnectionChange={(outputName: string, inputId: string, inputName: string, action:"add"|"remove") => this.onConnectionChange(nodeCfg.id, outputName, inputId, inputName, action)}
                     connector={this.connector}
                 />)}
             </div>
@@ -177,6 +207,8 @@ export class SynthGrid extends React.Component<TProps, any> {
             <button onClick={() => this.newNode('BiquadFilter')}>New BiquadFilter</button>
             <button onClick={() => this.newNode('SimpleOscillator')}>New Oscillator</button>
             <button onClick={() => this.newNode('Analyzer')}>New Analyzer</button>
+            <button onClick={() => this.undo()}>Undo</button>
+            <button onClick={() => this.redo()}>Redo</button>
         </div>
     }
 

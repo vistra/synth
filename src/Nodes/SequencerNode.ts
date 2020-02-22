@@ -74,7 +74,7 @@ export class SequencerNode implements SynthAudioNode {
     }
 
     pack() {
-        return _.clone(this.config);
+        return _.cloneDeep(this.config);
     }
 
     onTick(f) {

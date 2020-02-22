@@ -24,7 +24,6 @@ interface TProps {
     config: SynthNodeConfig,
     node: SynthAudioNode,
     onChange: (config: SynthNodeConfig<unknown>) => void
-    onConnectionChange: (outputName: string, inputId: string, inputName: string, action:"add"|"remove") => void
     connector: Connector
 }
 export class SynthNode extends React.Component<TProps> {
