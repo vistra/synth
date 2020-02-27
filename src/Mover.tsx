@@ -1,4 +1,12 @@
 import React from 'react';
+import {EventEmitter} from "events";
+
+const moverEvents = new EventEmitter();
+
+export const onMove = (f) => moverEvents.on('move', f);
+export const offMove = (f) => moverEvents.off('move', f);
+
+const triggerMoveEvent = () => moverEvents.emit('move');
 
 interface Props {
     onDrag: (dTop: number, dLeft: number) => void
@@ -35,15 +43,14 @@ export class Mover extends React.Component<Props, {}> {
         this.curTop += dTop;
         this.curLeft += dLeft;
         this.props.onDrag(dTop, dLeft);
+        triggerMoveEvent();
     }
 
     onMouseMove = (event) => {
         if (this.selected) {
             const dTop = event.clientY - this.curTop;
             const dLeft = event.clientX - this.curLeft;
-            // if (Math.abs(dTop) + Math.abs(dLeft) > 5) {
-                this.move(dTop, dLeft);
-            // }
+            this.move(dTop, dLeft);
         }
     };
 

@@ -18,6 +18,7 @@ import {AnalyzerNode} from "./Nodes/AnalyzerNode";
 import {SynthAudioNode} from "./Nodes/SynthAudioNode";
 import {DestinationNode} from "./Nodes/DestinationNode";
 import {Connector} from "./connector";
+import {onMove} from "./Mover";
 
 const INITIAL_GRID: GridConfig = {
     width: 500,
@@ -37,6 +38,7 @@ export class SynthGrid extends React.Component<TProps, any> {
     private connector: Connector;
     private history: GridConfig[] = [];
     private future: GridConfig[] = [];
+    private canvasEl: HTMLCanvasElement;
 
     constructor(props: TProps) {
         super(props);
@@ -192,7 +194,8 @@ export class SynthGrid extends React.Component<TProps, any> {
 
     render() {
         const { gridConfig } = this;
-        return <div style={{width: gridConfig.width, height: gridConfig.height}}>
+        return <div style={{width: gridConfig.width, height: gridConfig.height, position: "relative"}}>
+            <canvas width={gridConfig.width} height={gridConfig.height} ref={canvasEl => this.canvasEl = canvasEl} style={{position: "absolute", zIndex:-1}}/>
             <div>
                 {gridConfig.nodes.map(nodeCfg => <SynthNode
                     key={nodeCfg.id}
@@ -212,4 +215,25 @@ export class SynthGrid extends React.Component<TProps, any> {
         </div>
     }
 
+    componentDidMount() {
+        this.drawConnections();
+        onMove(() => this.drawConnections());
+    }
+
+    private drawConnections() {
+        const centerXY = (e: Element) => ({
+            x: e.getBoundingClientRect().x + e.getBoundingClientRect().width / 2,
+            y: e.getBoundingClientRect().y + e.getBoundingClientRect().height / 2,
+        });
+        const ctx = this.canvasEl.getContext('2d');
+        ctx.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
+        for (const conn of this.gridConfig.connections) {
+            const fromEl = document.getElementsByClassName(`out-${conn.fromNodeId}-${conn.fromOutputName}`)[0];
+            const toEl = document.getElementsByClassName(`in-${conn.toNodeId}-${conn.toInputName}`)[0];
+            ctx.beginPath();
+            ctx.moveTo(centerXY(fromEl).x, centerXY(fromEl).y);
+            ctx.lineTo(centerXY(toEl).x, centerXY(toEl).y);
+            ctx.stroke();
+        }
+    }
 }

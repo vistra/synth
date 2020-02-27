@@ -25,7 +25,9 @@ export class Analyzer extends React.Component<Props, any> {
         return <div>
             <canvas ref={(e) => this.waveCanvas = e} height={200} width={400} style={{border: "1px solid"}}/>
             <canvas ref={(e) => this.freqCanvas = e} height={200} width={400} style={{border: "1px solid"}}/>
-            <NodeInput connector={this.props.connector} name={"input"} nodeId={this.props.config.id}/>
+            <div className={"nodeInputs"}>
+                <NodeInput connector={this.props.connector} name={"input"} nodeId={this.props.config.id}/>
+            </div>
         </div>
     }
 

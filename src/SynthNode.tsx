@@ -36,7 +36,7 @@ export class SynthNode extends React.Component<TProps> {
     render() {
         const {config, node} = this.props;
         const {type} = config;
-        return <div className="synth-node" ref={(e) => this.e = e} style={{position:'fixed', top: config.top, left: config.left}}>{
+        return <div className="synth-node" ref={(e) => this.e = e} style={{position:'absolute', top: config.top, left: config.left}}>{
             type == 'BiquadFilter' ? <BiquadFilter
                     config={config as SynthNodeConfig<BiquadFilterSettings>}
                     node={node as BiquadFilterNode}
@@ -76,7 +76,6 @@ export class SynthNode extends React.Component<TProps> {
             }}
             onDragDone={(dTop: number, dLeft: number) => {
                 // Make sure not overlapping
-
                 const nodes = document.getElementsByClassName("synth-node");
                 const newTop = this.props.config.top + dTop;
                 const newLeft = this.props.config.left + dLeft;

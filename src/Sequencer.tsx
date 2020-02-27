@@ -105,14 +105,15 @@ export class Sequencer extends React.Component<Props, any> {
     render() {
         const add = (at) => <div style={{display: 'inline-block', position: "absolute", top: 134, height: '100%', textAlign: 'center'}}><button style={{right:-11, top:2, position: 'absolute'}} onClick={() => {this.props.node.addSlot(at); this.forceUpdate()}}>+</button></div>;
         return <div style={{border: '1px solid', display: 'inline-block', position: 'relative', padding: '0 20px'}}>
+            <div className={"nodeOutput"}>
+                <NodeOutput connector={this.props.connector} name={"detune"} nodeId={this.props.config.id}/>
+                <NodeOutput connector={this.props.connector} name={"gain"} nodeId={this.props.config.id}/>
+            </div>
             <div>
                 {add(0)}
                 {[].concat.apply([], this.slots.map((slot, i) => [this.renderSlot(slot, i), add(i + 1)]))}
-                {/*<button onClick={() => {this.slots.push({value:0, count: 1, gainPreset: 'full'}); this.update()}}>+</button>*/}
             </div>
             <input value={this.tickEvery} onChange={(e) => { this.props.node.setTickEvery(parseFloat(e.target.value) || 0.5);}}/>
-            <NodeOutput connector={this.props.connector} name={"detune"} nodeId={this.props.config.id}/>
-            <NodeOutput connector={this.props.connector} name={"gain"} nodeId={this.props.config.id}/>
         </div>
     }
 

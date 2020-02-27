@@ -18,11 +18,11 @@ export class NodeInput extends React.Component<Props, any> {
 
     render() {
         const connector = this.props.connector;
-        return <div>
+        return <span className={`in-${this.props.nodeId}-${this.props.name}`}>
             {this.props.name}
             {connector.isInputConnected(this.props.nodeId, this.props.name) && <span><button onClick={() => connector.disconnectInput(this.props.nodeId, this.props.name)}>(x)</button></span>}
             {connector.isOutputSelected() && <span><button onClick={() => connector.connectTo(this.props.nodeId, this.props.name)}>+</button></span>}
-        </div>
+        </span>
     }
 
     componentWillUnmount(): void {

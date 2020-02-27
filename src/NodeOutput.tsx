@@ -22,10 +22,10 @@ export class NodeOutput extends React.Component<Props, any> {
     };
 
     render() {
-        return <div>
+        return <span className={`out-${this.props.nodeId}-${this.props.name}`}>
             {this.props.name}&nbsp;
             <button onClick={this.select}>^</button>
-        </div>
+        </span>
     }
 
     componentWillUnmount(): void {

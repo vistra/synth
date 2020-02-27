@@ -130,10 +130,10 @@ class App extends React.Component {
     //     </div>
     // }
     render() {
-        return <div>
+        return <div style={{width:'100%', height:'100%'}}>
             <SynthGrid gridConfig={{
-                "width": 700,
-                "height": 700,
+                "width": 1400,
+                "height": 1400,
                 "nodes": [
                     {
                         "id": "destination_0",
