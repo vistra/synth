@@ -22,9 +22,17 @@ export class NodeOutput extends React.Component<Props, any> {
     };
 
     render() {
-        return <span className={`out-${this.props.nodeId}-${this.props.name}`}>
-            {this.props.name}&nbsp;
-            <button onClick={this.select}>^</button>
+        return <span  style={{
+            display: 'inline-block',
+            textAlign: 'center'
+        }}>
+            <i
+                onClick={this.select}
+                className={`out-${this.props.nodeId}-${this.props.name} material-icons-outlined`}>
+                fiber_manual_record
+            </i>
+            <br/>
+            {this.props.name}
         </span>
     }
 

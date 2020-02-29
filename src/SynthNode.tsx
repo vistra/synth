@@ -36,7 +36,7 @@ export class SynthNode extends React.Component<TProps> {
     render() {
         const {config, node} = this.props;
         const {type} = config;
-        return <div className="synth-node" ref={(e) => this.e = e} style={{position:'absolute', top: config.top, left: config.left}}>{
+        return <div className="synth-node" ref={(e) => this.e = e} style={{position:'absolute', top: config.top, left: config.left, padding: 5, border: '1px solid'}}>{
             type == 'BiquadFilter' ? <BiquadFilter
                     config={config as SynthNodeConfig<BiquadFilterSettings>}
                     node={node as BiquadFilterNode}
@@ -77,8 +77,8 @@ export class SynthNode extends React.Component<TProps> {
             onDragDone={(dTop: number, dLeft: number) => {
                 // Make sure not overlapping
                 const nodes = document.getElementsByClassName("synth-node");
-                const newTop = this.props.config.top + dTop;
-                const newLeft = this.props.config.left + dLeft;
+                let newTop = this.props.config.top + dTop;
+                let newLeft = this.props.config.left + dLeft;
                 const width = this.e.clientWidth;
                 const height = this.e.clientHeight;
 
@@ -103,16 +103,19 @@ export class SynthNode extends React.Component<TProps> {
                         myPoints.filter(p => p[0] >= points[0][0] && p[0] <= points[3][0] && p[1] >= points[0][1] && p[1] <= points[3][1]).length > 0
                     );
 
-                if (overlaps.length == 0) {
-                    this.props.onChange({
-                        ...this.props.config,
-                        top: newTop,
-                        left: newLeft
-                    });
-                } else {
+                if (overlaps.length > 0) {
+                    newTop = this.props.config.top;
+                    newLeft = this.props.config.left;
                     this.e.style.top = `${this.props.config.top}px`;
                     this.e.style.left = `${this.props.config.left}px`;
                 }
+
+                this.props.onChange({
+                    ...this.props.config,
+                    top: newTop,
+                    left: newLeft
+                });
+
             }
         }/>
         </div>;

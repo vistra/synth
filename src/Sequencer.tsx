@@ -43,13 +43,13 @@ function VerticalRange(props) {
     return <div style={{position: 'relative'}}>
         <input
             type="range"
-            style={{WebkitAppearance: "slider-vertical", width: 20}}
+            style={{WebkitAppearance: "slider-vertical", width: 20, height: 70}}
             min={min}
             max={max}
             value={value}
             onChange={onChange}
         />
-        <span style={{position: 'absolute', top: '45%', display: 'inline-block'}}>{value}</span>
+        <span style={{position: 'absolute', top: '31%', display: 'inline-block'}}>{value}</span>
     </div>
 
 }
@@ -94,17 +94,18 @@ export class Sequencer extends React.Component<Props, any> {
                 {Object.keys(GAIN_PRESETS).map(g => <option value={g}>{g}</option>)}
             </select>
             <br/>
-            <select style={{width: '100%'}} value={slot.transition} onChange={(e) => { this.props.node.editSlot(i, {...slot, transition: e.target.value}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}>
+            <select value={slot.transition} onChange={(e) => { this.props.node.editSlot(i, {...slot, transition: e.target.value}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}>
                 {TRANSITIONS.map(t => <option value={t}>{t}</option>)}
             </select>
-            <input value={slot.offset} onChange={(e) => { this.props.node.editSlot(i, {...slot, offset: parseFloat(e.target.value) || 0}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}/>
+            <br/>
+            <input style={{width:50}}  value={slot.offset} onChange={(e) => { this.props.node.editSlot(i, {...slot, offset: parseFloat(e.target.value) || 0}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}/>
         </div>
 
     }
 
     render() {
-        const add = (at) => <div style={{display: 'inline-block', position: "absolute", top: 134, height: '100%', textAlign: 'center'}}><button style={{right:-11, top:2, position: 'absolute'}} onClick={() => {this.props.node.addSlot(at); this.forceUpdate()}}>+</button></div>;
-        return <div style={{border: '1px solid', display: 'inline-block', position: 'relative', padding: '0 20px'}}>
+        const add = (at) => <div style={{display: 'inline-block', position: "absolute", top: 125, height: '100%', textAlign: 'center'}}><button style={{right:11, top:2, position: 'absolute'}} onClick={() => {this.props.node.addSlot(at); this.forceUpdate()}}>+</button></div>;
+        return <div style={{padding: '0 0 0 40px'}}>
             <div className={"nodeOutput"}>
                 <NodeOutput connector={this.props.connector} name={"detune"} nodeId={this.props.config.id}/>
                 <NodeOutput connector={this.props.connector} name={"gain"} nodeId={this.props.config.id}/>

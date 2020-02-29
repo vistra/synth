@@ -20,7 +20,14 @@ export class Mover extends React.Component<Props, {}> {
     private curLeft: number;
 
     render() {
-        return <div onMouseDown={this.onMouseDown}>Move</div>
+        return <div
+            style={{
+                position: 'absolute',
+                top: 3,
+                right: 3
+            }}>
+            <i className='material-icons' onMouseDown={this.onMouseDown}>control_camera</i>
+        </div>
     }
 
     private destroyMover() {

@@ -52,6 +52,7 @@ export class Connector {
                 nodeId,
                 name
             )
+            this.selectedOutput = null;
         }
         this.changed();
     }

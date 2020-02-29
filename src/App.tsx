@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import 'typeface-roboto';
 import {Oscillator} from "./Oscilator";
 import {Analyzer} from "./Analyzer";
 import {FreeformWave} from "./FreeformWave";
@@ -132,7 +133,7 @@ class App extends React.Component {
     render() {
         return <div style={{width:'100%', height:'100%'}}>
             <SynthGrid gridConfig={{
-                "width": 1400,
+                "width": 1800,
                 "height": 1400,
                 "nodes": [
                     {

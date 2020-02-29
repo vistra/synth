@@ -129,23 +129,7 @@ export class SynthGrid extends React.Component<TProps, any> {
         this.gridConfig.nodes = this.gridConfig.nodes.map(node => node.id == changedNode.id ? _.cloneDeep(changedNode) : node);
         this.future = [];
         this.configChanged(this.gridConfig, false);
-    };
-
-    onConnectionChange = (outputId: string, outputName: string, inputId: string, inputName: string, action: "add"|"remove") => {
-        this.gridConfig.connections = this.gridConfig.connections
-            .filter(
-                x => x.fromNodeId != outputId ||
-                    x.fromOutputName != outputName ||
-                    x.toNodeId != inputId ||
-                    x.toInputName != inputName
-            ).concat(action == "add" ? [{
-                fromNodeId: outputId,
-                fromOutputName: outputName,
-                toNodeId: inputId,
-                toInputName: inputName
-            }] : []);
-        this.configChanged(this.gridConfig, true);
-        this.future = [];
+        this.drawConnections();
     };
 
     newNode(type: NodeType) {
@@ -218,12 +202,13 @@ export class SynthGrid extends React.Component<TProps, any> {
     componentDidMount() {
         this.drawConnections();
         onMove(() => this.drawConnections());
+        this.connector.onChange(() => this.drawConnections());
     }
 
     private drawConnections() {
         const centerXY = (e: Element) => ({
-            x: e.getBoundingClientRect().x + e.getBoundingClientRect().width / 2,
-            y: e.getBoundingClientRect().y + e.getBoundingClientRect().height / 2,
+            x: e.getBoundingClientRect().left + window.scrollX + e.getBoundingClientRect().width / 2,
+            y: e.getBoundingClientRect().top + window.scrollY +e.getBoundingClientRect().height / 2,
         });
         const ctx = this.canvasEl.getContext('2d');
         ctx.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
@@ -232,6 +217,8 @@ export class SynthGrid extends React.Component<TProps, any> {
             const toEl = document.getElementsByClassName(`in-${conn.toNodeId}-${conn.toInputName}`)[0];
             ctx.beginPath();
             ctx.moveTo(centerXY(fromEl).x, centerXY(fromEl).y);
+            // ctx.lineTo(centerXY(fromEl).x, (centerXY(fromEl).y + centerXY(toEl).y) / 2);
+            // ctx.lineTo(centerXY(toEl).x, (centerXY(fromEl).y + centerXY(toEl).y) / 2);
             ctx.lineTo(centerXY(toEl).x, centerXY(toEl).y);
             ctx.stroke();
         }

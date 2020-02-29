@@ -16,7 +16,7 @@ interface Props {
 export class SimpleOscillator extends React.Component<Props, any> {
 
     render() {
-        return <div style={{border: '1px solid', padding: 10, display:'inline-block'}}>
+        return <div style={{display:'inline-block'}}>
             <div className={"nodeOutputs"}>
                 <NodeOutput connector={this.props.connector} name={"output"} nodeId={this.props.config.id}/>
             </div>

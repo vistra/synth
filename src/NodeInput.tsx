@@ -4,7 +4,8 @@ import {Connector} from "./connector";
 interface Props {
     connector: Connector;
     name: string,
-    nodeId: string}
+    nodeId: string
+}
 export class NodeInput extends React.Component<Props, any> {
     constructor(props: Props) {
         super(props);
@@ -18,10 +19,23 @@ export class NodeInput extends React.Component<Props, any> {
 
     render() {
         const connector = this.props.connector;
-        return <span className={`in-${this.props.nodeId}-${this.props.name}`}>
+        return <span style={{
+            display: 'inline-block',
+            textAlign: 'center'
+        }}>
             {this.props.name}
-            {connector.isInputConnected(this.props.nodeId, this.props.name) && <span><button onClick={() => connector.disconnectInput(this.props.nodeId, this.props.name)}>(x)</button></span>}
-            {connector.isOutputSelected() && <span><button onClick={() => connector.connectTo(this.props.nodeId, this.props.name)}>+</button></span>}
+            <br/>
+            <i
+                onClick={() => {
+                    if (connector.isInputConnected(this.props.nodeId, this.props.name)) {
+                        connector.disconnectInput(this.props.nodeId, this.props.name)
+                    } else if (connector.isOutputSelected()) {
+                        connector.connectTo(this.props.nodeId, this.props.name)
+                    }
+                }}
+                className={`in-${this.props.nodeId}-${this.props.name} material-icons-outlined`}>
+                fiber_manual_record
+            </i>
         </span>
     }
 
