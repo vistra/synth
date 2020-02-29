@@ -5,6 +5,7 @@ import {BiquadFilterNode} from "./Nodes/BiquadFilterNode";
 import {Connector} from "./connector";
 import {NodeOutput} from "./NodeOutput";
 import {NodeInput} from "./NodeInput";
+import {IOPane} from "./IOPane";
 
 interface TProps {
     config: SynthNodeConfig<BiquadFilterSettings>,
@@ -20,9 +21,9 @@ export class BiquadFilter extends React.Component<TProps, {}> {
 
     render() {
         return <div style={{display:'inline-block'}}>
-            <div className={"nodeOutputs"}>
+            <IOPane>
                 <NodeOutput connector={this.props.connector} name={"output"} nodeId={this.props.config.id}/>
-            </div>
+            </IOPane>
             <span>Filter {this.props.config.id} </span>
             <div><select value={this.props.node.config.settings.type} onChange={(e) => this.onTypeChange(e.target.value)}>
                 <option value={'lowpass'}>lowpass</option>
@@ -40,9 +41,9 @@ export class BiquadFilter extends React.Component<TProps, {}> {
             </div>
             <div>Gain:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="range" min="0" max="100" value={this.props.node.config.settings.gain} onChange={(e) => this.onGainChange(e.target.value)}/></div>
             <div>Q:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="range" min="0" max="100" value={this.props.node.config.settings.Q} onChange={(e) => this.onQChange(e.target.value)}/></div>
-            <div className={"nodeInputs"}>
+            <IOPane>
                 <NodeInput connector={this.props.connector} name={"input"} nodeId={this.props.config.id}/>
-            </div>
+            </IOPane>
         </div>
     }
 

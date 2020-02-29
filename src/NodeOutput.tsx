@@ -24,6 +24,7 @@ export class NodeOutput extends React.Component<Props, any> {
     render() {
         return <span  style={{
             display: 'inline-block',
+            lineHeight: 0.4,
             textAlign: 'center'
         }}>
             <i
@@ -32,7 +33,9 @@ export class NodeOutput extends React.Component<Props, any> {
                 fiber_manual_record
             </i>
             <br/>
-            {this.props.name}
+            <span style={{
+                fontSize: '0.8em'
+            }}>{this.props.name}</span>
         </span>
     }
 

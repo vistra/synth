@@ -21,9 +21,12 @@ export class NodeInput extends React.Component<Props, any> {
         const connector = this.props.connector;
         return <span style={{
             display: 'inline-block',
+            lineHeight: 0.8,
             textAlign: 'center'
         }}>
-            {this.props.name}
+            <span style={{
+                fontSize: '0.8em'
+            }}>{this.props.name}</span>
             <br/>
             <i
                 onClick={() => {

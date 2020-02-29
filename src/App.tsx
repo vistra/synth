@@ -139,8 +139,8 @@ class App extends React.Component {
                     {
                         "id": "destination_0",
                         "type": "Destination",
-                        "top": 28,
-                        "left": 6,
+                        "top": 306,
+                        "left": 134,
                         "inputs": [
                             "input"
                         ],
@@ -150,8 +150,8 @@ class App extends React.Component {
                     {
                         "id": "SimpleOscillator_1",
                         "type": "SimpleOscillator",
-                        "top": 242,
-                        "left": 830,
+                        "top": 344,
+                        "left": 705,
                         "inputs": [],
                         "outputs": [
                             "output"
@@ -166,8 +166,8 @@ class App extends React.Component {
                     {
                         "id": "BiquadFilter_2",
                         "type": "BiquadFilter",
-                        "top": 261,
-                        "left": 547,
+                        "top": 342,
+                        "left": 339,
                         "inputs": [
                             "input"
                         ],
@@ -184,8 +184,8 @@ class App extends React.Component {
                     {
                         "id": "Analyzer_3",
                         "type": "Analyzer",
-                        "top": 26,
-                        "left": 418,
+                        "top": 44,
+                        "left": 422,
                         "inputs": [
                             "input"
                         ],
@@ -195,8 +195,8 @@ class App extends React.Component {
                     {
                         "id": "Sequencer_4",
                         "type": "Sequencer",
-                        "top": 457,
-                        "left": 42,
+                        "top": 576,
+                        "left": 485,
                         "inputs": [],
                         "outputs": [
                             "gain",
@@ -297,8 +297,7 @@ class App extends React.Component {
                         "toInputName": "input"
                     }
                 ]
-            }
-            } onChange={(p)=>console.log(JSON.stringify(p, null, 2))}/>
+            }} onChange={(p)=>console.log(JSON.stringify(p, null, 2))}/>
         </div>
     }
 }

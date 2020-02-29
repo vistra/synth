@@ -5,6 +5,7 @@ import {SequencerSettings, SequencerSlot, SynthNodeConfig} from "./grid-config";
 import {Connector} from "./connector";
 import {NodeInput} from "./NodeInput";
 import {NodeOutput} from "./NodeOutput";
+import {IOPane} from "./IOPane";
 
 const GAIN_PRESETS = {
     full: [],
@@ -89,7 +90,6 @@ export class Sequencer extends React.Component<Props, any> {
             <VerticalRange min={1} max={8}
                       value={slot.count}
                        onChange={(e) => { this.props.node.editSlot(i, {...slot, count: parseFloat(e.target.value)}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}/>
-            <br/>
             <select value={slot.gainPreset} onChange={(e) => { this.props.node.editSlot(i, {...slot, gainPreset: e.target.value}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}>
                 {Object.keys(GAIN_PRESETS).map(g => <option value={g}>{g}</option>)}
             </select>
@@ -104,13 +104,14 @@ export class Sequencer extends React.Component<Props, any> {
     }
 
     render() {
-        const add = (at) => <div style={{display: 'inline-block', position: "absolute", top: 125, height: '100%', textAlign: 'center'}}><button style={{right:11, top:2, position: 'absolute'}} onClick={() => {this.props.node.addSlot(at); this.forceUpdate()}}>+</button></div>;
+        const add = (at) => <div style={{display: 'inline-block', position: "absolute", top: 75, height: '100%', textAlign: 'center'}}><button style={{right:11, top:2, position: 'absolute'}} onClick={() => {this.props.node.addSlot(at); this.forceUpdate()}}>+</button></div>;
         return <div style={{padding: '0 0 0 40px'}}>
-            <div className={"nodeOutput"}>
+            <IOPane>
                 <NodeOutput connector={this.props.connector} name={"detune"} nodeId={this.props.config.id}/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <NodeOutput connector={this.props.connector} name={"gain"} nodeId={this.props.config.id}/>
-            </div>
-            <div>
+            </IOPane>
+            <div style={{position: 'relative'}}>
                 {add(0)}
                 {[].concat.apply([], this.slots.map((slot, i) => [this.renderSlot(slot, i), add(i + 1)]))}
             </div>

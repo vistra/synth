@@ -6,6 +6,7 @@ import {SimpleOscillatorNode} from "./Nodes/SimpleOscillatorNode";
 import {Connector} from "./connector";
 import {NodeInput} from "./NodeInput";
 import {NodeOutput} from "./NodeOutput";
+import {IOPane} from "./IOPane";
 
 interface Props {
     config: SynthNodeConfig<SimpleOscillatorSettings>,
@@ -17,9 +18,9 @@ export class SimpleOscillator extends React.Component<Props, any> {
 
     render() {
         return <div style={{display:'inline-block'}}>
-            <div className={"nodeOutputs"}>
+            <IOPane>
                 <NodeOutput connector={this.props.connector} name={"output"} nodeId={this.props.config.id}/>
-            </div>
+            </IOPane>
             <span>Oscillator {this.props.node.config.id} </span>
             <div><select value={this.props.node.config.settings.type} onChange={(e) => this.onTypeChange(e.target.value)}>
                 <option value={'sine'}>sin</option>
@@ -32,10 +33,11 @@ export class SimpleOscillator extends React.Component<Props, any> {
             </div>
             <div>Gain:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="range" min="0" max="100" value={this.props.node.config.settings.gain} onChange={(e) => this.onGainChange(e.target.value)}/></div>
             <div>Delay:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="range" min="0" max="100" value={this.props.node.config.settings.delay} onChange={(e) => this.onPhaseChange(e.target.value)}/></div>
-            <span className={"nodeInputs"}>
+            <IOPane>
                 <NodeInput connector={this.props.connector} name={"detune"} nodeId={this.props.config.id}/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <NodeInput connector={this.props.connector} name={"gain"} nodeId={this.props.config.id}/>
-            </span>
+            </IOPane>
         </div>
     }
 

@@ -4,6 +4,7 @@ import {AnalyzerNode} from "./Nodes/AnalyzerNode";
 import {Connector} from "./connector";
 import {NodeOutput} from "./NodeOutput";
 import {NodeInput} from "./NodeInput";
+import {IOPane} from "./IOPane";
 
 interface Props {
     config: SynthNodeConfig<AnalyzerSettings>,
@@ -25,9 +26,9 @@ export class Analyzer extends React.Component<Props, any> {
         return <div>
             <canvas ref={(e) => this.waveCanvas = e} height={200} width={400} style={{border: "1px solid"}}/>
             <canvas ref={(e) => this.freqCanvas = e} height={200} width={400} style={{border: "1px solid"}}/>
-            <div className={"nodeInputs"}>
+            <IOPane>
                 <NodeInput connector={this.props.connector} name={"input"} nodeId={this.props.config.id}/>
-            </div>
+            </IOPane>
         </div>
     }
 

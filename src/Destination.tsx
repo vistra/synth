@@ -5,6 +5,7 @@ import {DestinationNode} from "./Nodes/DestinationNode";
 import {Connector} from "./connector";
 import {NodeOutput} from "./NodeOutput";
 import {NodeInput} from "./NodeInput";
+import {IOPane} from "./IOPane";
 
 interface Props {
     config: SynthNodeConfig<DestinationSettings>,
@@ -16,10 +17,10 @@ export class Destination extends React.Component<Props, any> {
 
     render() {
         return <div>
-            Destination!
-            <div className={"nodeInputs"}>
+            <div style={{paddingRight: 25}}>Out</div>
+            <IOPane>
                 <NodeInput connector={this.props.connector} name={"input"} nodeId={this.props.config.id}/>
-            </div>
+            </IOPane>
         </div>
     }
 
