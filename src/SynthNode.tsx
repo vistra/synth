@@ -36,7 +36,7 @@ export class SynthNode extends React.Component<TProps> {
     render() {
         const {config, node} = this.props;
         const {type} = config;
-        return <div className="synth-node" ref={(e) => this.e = e} style={{position:'absolute', top: config.top, left: config.left, padding: 5, border: '1px solid'}}>{
+        return <div className="synth-node" ref={(e) => this.e = e} style={{position:'absolute', top: config.top, left: config.left, padding: 5}}>{
             type == 'BiquadFilter' ? <BiquadFilter
                     config={config as SynthNodeConfig<BiquadFilterSettings>}
                     node={node as BiquadFilterNode}

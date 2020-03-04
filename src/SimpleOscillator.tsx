@@ -21,6 +21,7 @@ export class SimpleOscillator extends React.Component<Props, any> {
             <IOPane>
                 <NodeOutput connector={this.props.connector} name={"output"} nodeId={this.props.config.id}/>
             </IOPane>
+            <hr/>
             <span>Oscillator {this.props.node.config.id} </span>
             <div><select value={this.props.node.config.settings.type} onChange={(e) => this.onTypeChange(e.target.value)}>
                 <option value={'sine'}>sin</option>

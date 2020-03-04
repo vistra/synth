@@ -80,7 +80,8 @@ export class Sequencer extends React.Component<Props, any> {
     }
 
     renderSlot(slot: SequencerSlot, i: number) {
-        return <div style={{display: 'inline-block'}} ref={(e) => this.slotEls[i] = e} key={i} >
+        return <div style={{display: 'inline-block', position:'relative'}} ref={(e) => this.slotEls[i] = e} key={i} >
+            <div style={{position:'relative', left: 20}}>
             <VerticalRange min={-12} max={12}
                       value={slot.value}
                        onChange={(e) => { this.props.node.editSlot(i, {...slot, value: parseFloat(e.target.value) || 0}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}
@@ -90,11 +91,12 @@ export class Sequencer extends React.Component<Props, any> {
             <VerticalRange min={1} max={8}
                       value={slot.count}
                        onChange={(e) => { this.props.node.editSlot(i, {...slot, count: parseFloat(e.target.value)}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}/>
-            <select value={slot.gainPreset} onChange={(e) => { this.props.node.editSlot(i, {...slot, gainPreset: e.target.value}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}>
+            </div>
+            <select style={{width: '100%'}} value={slot.gainPreset} onChange={(e) => { this.props.node.editSlot(i, {...slot, gainPreset: e.target.value}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}>
                 {Object.keys(GAIN_PRESETS).map(g => <option value={g}>{g}</option>)}
             </select>
             <br/>
-            <select value={slot.transition} onChange={(e) => { this.props.node.editSlot(i, {...slot, transition: e.target.value}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}>
+            <select style={{width: '100%'}} value={slot.transition} onChange={(e) => { this.props.node.editSlot(i, {...slot, transition: e.target.value}); this.props.onChange(this.props.node.pack()); this.forceUpdate();}}>
                 {TRANSITIONS.map(t => <option value={t}>{t}</option>)}
             </select>
             <br/>
@@ -104,13 +106,17 @@ export class Sequencer extends React.Component<Props, any> {
     }
 
     render() {
-        const add = (at) => <div style={{display: 'inline-block', position: "absolute", top: 75, height: '100%', textAlign: 'center'}}><button style={{right:11, top:2, position: 'absolute'}} onClick={() => {this.props.node.addSlot(at); this.forceUpdate()}}>+</button></div>;
-        return <div style={{padding: '0 0 0 40px'}}>
+        const add = (at) => <div style={{display: 'inline-block', height: '100%', textAlign: 'center', position: 'relative', bottom: '140px'}}><button style={{}} onClick={() => {this.props.node.addSlot(at); this.forceUpdate()}}>+</button></div>;
+        return <div style={{position: 'relative'}}>
+            <div style={{position: 'absolute', top: 10, left: 3}}>
+                Sequencer {this.props.config.id}
+            </div>
             <IOPane>
                 <NodeOutput connector={this.props.connector} name={"detune"} nodeId={this.props.config.id}/>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <NodeOutput connector={this.props.connector} name={"gain"} nodeId={this.props.config.id}/>
             </IOPane>
+            <hr/>
             <div style={{position: 'relative'}}>
                 {add(0)}
                 {[].concat.apply([], this.slots.map((slot, i) => [this.renderSlot(slot, i), add(i + 1)]))}

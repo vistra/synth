@@ -3,7 +3,7 @@ import {NodeConnection} from "./grid-config";
 export class Connector {
 
     private listeners: Array<()=>void> = [];
-    private selectedOutput: {nodeId: string, name: string};
+    public selectedOutput: {nodeId: string, name: string};
 
     constructor(
         private connections: () => NodeConnection[],
@@ -46,12 +46,13 @@ export class Connector {
 
     connectTo(nodeId: string, name: string) {
         if (this.selectedOutput) {
+            this.clearConnection(nodeId, name);
             this.addConnection(
                 this.selectedOutput.nodeId,
                 this.selectedOutput.name,
                 nodeId,
                 name
-            )
+            );
             this.selectedOutput = null;
         }
         this.changed();

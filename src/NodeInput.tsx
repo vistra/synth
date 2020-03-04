@@ -30,10 +30,10 @@ export class NodeInput extends React.Component<Props, any> {
             <br/>
             <i
                 onClick={() => {
-                    if (connector.isInputConnected(this.props.nodeId, this.props.name)) {
-                        connector.disconnectInput(this.props.nodeId, this.props.name)
-                    } else if (connector.isOutputSelected()) {
+                    if (connector.isOutputSelected()) {
                         connector.connectTo(this.props.nodeId, this.props.name)
+                    } else if (connector.isInputConnected(this.props.nodeId, this.props.name)) {
+                        connector.disconnectInput(this.props.nodeId, this.props.name)
                     }
                 }}
                 className={`in-${this.props.nodeId}-${this.props.name} material-icons-outlined`}>

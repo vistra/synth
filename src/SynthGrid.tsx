@@ -39,6 +39,8 @@ export class SynthGrid extends React.Component<TProps, any> {
     private history: GridConfig[] = [];
     private future: GridConfig[] = [];
     private canvasEl: HTMLCanvasElement;
+    private mouseX: number;
+    private mouseY: number;
 
     constructor(props: TProps) {
         super(props);
@@ -178,8 +180,8 @@ export class SynthGrid extends React.Component<TProps, any> {
 
     render() {
         const { gridConfig } = this;
-        return <div style={{width: gridConfig.width, height: gridConfig.height, position: "relative"}}>
-            <canvas width={gridConfig.width} height={gridConfig.height} ref={canvasEl => this.canvasEl = canvasEl} style={{position: "absolute", zIndex:-1}}/>
+        return <div style={{width: gridConfig.width, height: gridConfig.height, position: "relative"}} onMouseMove={(e) => this.onMouseMove(e)}>
+            <canvas className={'connector-canvas'} width={gridConfig.width} height={gridConfig.height} ref={canvasEl => this.canvasEl = canvasEl} style={{position: "absolute", zIndex:10}}/>
             <div>
                 {gridConfig.nodes.map(nodeCfg => <SynthNode
                     key={nodeCfg.id}
@@ -190,19 +192,24 @@ export class SynthGrid extends React.Component<TProps, any> {
                 />)}
             </div>
 
-            <button onClick={() => this.newNode('Sequencer')}>New Sequencer</button>
-            <button onClick={() => this.newNode('BiquadFilter')}>New BiquadFilter</button>
-            <button onClick={() => this.newNode('SimpleOscillator')}>New Oscillator</button>
-            <button onClick={() => this.newNode('Analyzer')}>New Analyzer</button>
+            <button onClick={() => this.newNode('Sequencer')}>Sequencer</button>
+            <button onClick={() => this.newNode('BiquadFilter')}>BiquadFilter</button>
+            <button onClick={() => this.newNode('SimpleOscillator')}>Oscillator</button>
+            <button onClick={() => this.newNode('Analyzer')}>Analyzer</button>
             <button onClick={() => this.undo()}>Undo</button>
             <button onClick={() => this.redo()}>Redo</button>
         </div>
     }
 
     componentDidMount() {
-        this.drawConnections();
-        onMove(() => this.drawConnections());
-        this.connector.onChange(() => this.drawConnections());
+        // this.drawConnections();
+        // onMove(() => this.drawConnections());
+        // this.connector.onChange(() => this.drawConnections());
+        const drawer = () => {
+            this.drawConnections();
+            requestAnimationFrame(drawer);
+        };
+        drawer();
     }
 
     private drawConnections() {
@@ -215,12 +222,52 @@ export class SynthGrid extends React.Component<TProps, any> {
         for (const conn of this.gridConfig.connections) {
             const fromEl = document.getElementsByClassName(`out-${conn.fromNodeId}-${conn.fromOutputName}`)[0];
             const toEl = document.getElementsByClassName(`in-${conn.toNodeId}-${conn.toInputName}`)[0];
-            ctx.beginPath();
-            ctx.moveTo(centerXY(fromEl).x, centerXY(fromEl).y);
-            // ctx.lineTo(centerXY(fromEl).x, (centerXY(fromEl).y + centerXY(toEl).y) / 2);
-            // ctx.lineTo(centerXY(toEl).x, (centerXY(fromEl).y + centerXY(toEl).y) / 2);
-            ctx.lineTo(centerXY(toEl).x, centerXY(toEl).y);
-            ctx.stroke();
+            drawConnectionLine(ctx, centerXY(fromEl).x, centerXY(fromEl).y, centerXY(toEl).x, centerXY(toEl).y);
+        }
+
+        if (this.connector.isOutputSelected()) {
+            const out = this.connector.selectedOutput;
+            const fromEl = document.getElementsByClassName(`out-${out.nodeId}-${out.name}`)[0];
+            drawConnectionLine(ctx, centerXY(fromEl).x, centerXY(fromEl).y, this.mouseX, this.mouseY);
         }
     }
+
+    private onMouseMove(e) {
+        this.mouseX = e.pageX;
+        this.mouseY = e.pageY;
+    }
+}
+
+function drawConnectionLine(ctx: CanvasRenderingContext2D, fromX, fromY, toX, toY) {
+    const pulseLength = 20;
+    const compression = 0.9;
+    const pulseTime = 125;
+    ctx.lineWidth = 3;
+    const offset = 2 - (Date.now() % (pulseTime*2)) / pulseTime;
+    const d = Math.sqrt((toY - fromY)*(toY - fromY) + (toX - fromX)*(toX - fromX));
+    const step = pulseLength / d;
+    const pulseLengthX = step*(toX - fromX);
+    const pulseLengthY = step*(toY - fromY);
+    ctx.beginPath();
+    ctx.moveTo(
+        fromX,
+        fromY
+    );
+
+    const gradient = ctx.createLinearGradient(
+        fromX - pulseLengthX*offset,
+        fromY - pulseLengthY*offset,
+        toX + pulseLengthX*(2-offset),
+        toY + pulseLengthY*(2-offset)
+    );
+    for (let p = 0, i = 0; p <= 1; p += step*(i%2 ? 1+compression : 1 - compression)*10/12, i++) {
+        gradient.addColorStop(p, i % 2 == 0 ? 'white' : 'black');
+        // if (p + step*10/12*compression <= 1) {
+        //     gradient.addColorStop(p + step*10/12*compression, i % 2 == 0 ? 'black' : 'white');
+        // }
+    }
+    ctx.strokeStyle = gradient;
+    ctx.lineTo(toX, toY);
+    ctx.stroke();
+    ctx.closePath();
 }
