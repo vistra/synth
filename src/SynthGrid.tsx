@@ -19,6 +19,7 @@ import {SynthAudioNode} from "./Nodes/SynthAudioNode";
 import {DestinationNode} from "./Nodes/DestinationNode";
 import {Connector} from "./connector";
 import {onMove} from "./Mover";
+import {BackgroundEqualizer} from "./BackgroundEqualizer";
 
 const INITIAL_GRID: GridConfig = {
     width: 500,
@@ -41,6 +42,7 @@ export class SynthGrid extends React.Component<TProps, any> {
     private canvasEl: HTMLCanvasElement;
     private mouseX: number;
     private mouseY: number;
+    private analyzer: AnalyserNode;
 
     constructor(props: TProps) {
         super(props);
@@ -74,12 +76,13 @@ export class SynthGrid extends React.Component<TProps, any> {
             this.audioCtx.close();
         }
         this.audioCtx = new AudioContext();
+        this.analyzer = this.audioCtx.createAnalyser();;
         const nodes: SynthAudioNode[] = this.gridConfig.nodes.map(node =>
             node.type == "Sequencer" ? new SequencerNode(this.audioCtx, node as SynthNodeConfig<SequencerSettings>)
                 : node.type == 'BiquadFilter' ? new BiquadFilterNode(this.audioCtx, node as SynthNodeConfig<BiquadFilterSettings>)
                 : node.type == 'SimpleOscillator' ? new SimpleOscillatorNode(this.audioCtx, node as SynthNodeConfig<SimpleOscillatorSettings>)
                 : node.type == 'Analyzer' ? new AnalyzerNode(this.audioCtx, node as SynthNodeConfig<AnalyzerSettings>)
-                : node.type == 'Destination' ? new DestinationNode(this.audioCtx, node as SynthNodeConfig<DestinationSettings>)
+                : node.type == 'Destination' ? new DestinationNode(this.audioCtx, node as SynthNodeConfig<DestinationSettings>, this.analyzer)
                 : null
         );
         this.nodes = {};
@@ -181,6 +184,7 @@ export class SynthGrid extends React.Component<TProps, any> {
     render() {
         const { gridConfig } = this;
         return <div style={{width: gridConfig.width, height: gridConfig.height, position: "relative"}} onMouseMove={(e) => this.onMouseMove(e)}>
+            <BackgroundEqualizer analyzer={this.analyzer}/>
             <canvas className={'connector-canvas'} width={gridConfig.width} height={gridConfig.height} ref={canvasEl => this.canvasEl = canvasEl} style={{position: "absolute", zIndex:10}}/>
             <div>
                 {gridConfig.nodes.map(nodeCfg => <SynthNode

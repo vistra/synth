@@ -1,18 +1,10 @@
 import React from 'react';
-import {AnalyzerSettings, SimpleOscillatorSettings, SynthNodeConfig} from "./grid-config";
-import {AnalyzerNode} from "./Nodes/AnalyzerNode";
-import {Connector} from "./connector";
-import {NodeOutput} from "./NodeOutput";
-import {NodeInput} from "./NodeInput";
-import {IOPane} from "./IOPane";
+import {DestinationNode} from "./Nodes/DestinationNode";
 
 interface Props {
-    config: SynthNodeConfig<AnalyzerSettings>,
-    node: AnalyzerNode,
-    onChange: (config: SynthNodeConfig<SimpleOscillatorSettings>) => void
-    connector: Connector;
+    analyzer: AnalyserNode;
 }
-export class Analyzer extends React.Component<Props, any> {
+export class BackgroundEqualizer extends React.Component<Props, any> {
 
     waveCanvas = null;
     freqCanvas = null;
@@ -23,22 +15,18 @@ export class Analyzer extends React.Component<Props, any> {
     }
 
     render() {
-        return <div>
+        return <div className={"background-equalize"}>
             <canvas ref={(e) => this.waveCanvas = e} height={200} width={400} style={{border: "1px solid"}}/>
             <canvas ref={(e) => this.freqCanvas = e} height={200} width={400} style={{border: "1px solid"}}/>
-            <IOPane>
-                <NodeInput connector={this.props.connector} name={"input"} nodeId={this.props.config.id}/>
-            </IOPane>
         </div>
     }
 
     updateWave() {
         if (this.waveCanvas) {
             const ctx = this.waveCanvas.getContext("2d");
-            const {analyzer} = this.props.node;
 
-            const dataArray = new Float32Array(analyzer.fftSize);
-            analyzer.getFloatTimeDomainData(dataArray);
+            const dataArray = new Float32Array(this.props.analyzer.fftSize);
+            this.props.analyzer.getFloatTimeDomainData(dataArray);
 
             ctx.clearRect(0, 0, 400, 200);
             ctx.beginPath();
@@ -56,14 +44,10 @@ export class Analyzer extends React.Component<Props, any> {
     updateFreq() {
         if (this.freqCanvas) {
             const ctx = this.freqCanvas.getContext("2d");
-            const {analyzer} = this.props.node;
 
-            // const dataArray = new Float32Array(analyzer.fftSize);
-            // analyzer.getFloatFrequencyData(dataArray);
-
-            const dataArray = new Uint8Array(analyzer.fftSize);
-            analyzer.getByteFrequencyData(dataArray);
-            const n = analyzer.frequencyBinCount;
+            const dataArray = new Uint8Array(this.props.analyzer.fftSize);
+            this.props.analyzer.getByteFrequencyData(dataArray);
+            const n = this.props.analyzer.frequencyBinCount;
             ctx.clearRect(0, 0, 400, 200);
             for (let i=0; i<n; i++) {
                 const x = i/n * 400;
