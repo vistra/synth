@@ -23,13 +23,17 @@ import {Mover} from "./Mover";
 interface TProps {
     config: SynthNodeConfig,
     node: SynthAudioNode,
-    onChange: (config: SynthNodeConfig<unknown>) => void
+    onChange: (config: SynthNodeConfig<unknown>) => void,
+    onDelete: (config: SynthNodeConfig<unknown>) => void,
     connector: Connector
 }
 export class SynthNode extends React.Component<TProps> {
 
     onChange = (config: SynthNodeConfig<unknown>) => {
         this.props.onChange(config);
+    };
+    onDeletion = () => {
+        this.props.onDelete(this.props.config);
     };
     private e: HTMLDivElement;
 
@@ -69,6 +73,7 @@ export class SynthNode extends React.Component<TProps> {
                             />
                             : <div>Unsupported node type :(</div>
         }
+        <i className='material-icons' onClick={this.onDeletion}>delete</i>
         <Mover
             onDrag={(dTop: number, dLeft: number) => {
                 this.e.style.top = `${this.e.offsetTop + dTop}px`;

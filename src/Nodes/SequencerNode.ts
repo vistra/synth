@@ -122,9 +122,15 @@ export class SequencerNode implements SynthAudioNode {
 
     setTickEvery(tickEvery: number) {
         this.config.settings.tickEvery = tickEvery;
+        this.reset();
     }
 
-
+    reset() {
+        this.allTicks = -1;
+        this.slotTick = -1;
+        this.tick = -1;
+        this.baseTime = this.audioCtx.currentTime;
+    }
 
     private callOnOutput(name: 'gain'|'detune', fn: (output: AudioParam)=>void) {
         const output = this.outputs[name];
@@ -132,10 +138,7 @@ export class SequencerNode implements SynthAudioNode {
     }
 
     start() {
-        this.baseTime = this.audioCtx.currentTime;
-        this.tick = -1;
-        this.allTicks = -1;
-        this.slotTick = -1;
+        this.reset();
         const nextTick = () => {
             this.slotTick++;
             this.allTicks++;

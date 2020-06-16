@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Oxanium&display=swap');
 
+html {
+  width: 100%;
+  height: 100%;
+}
+
 :root {
   --grid-bgcolor: #171820;
   --node-bgcolor: #f9ffd7;
@@ -22,4 +27,12 @@ body {
 
 .connector-canvas {
   pointer-events: none;
+}
+
+.background-equalize {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: -100;
 }

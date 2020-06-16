@@ -76,7 +76,7 @@ export class SynthGrid extends React.Component<TProps, any> {
             this.audioCtx.close();
         }
         this.audioCtx = new AudioContext();
-        this.analyzer = this.audioCtx.createAnalyser();;
+        this.analyzer = this.audioCtx.createAnalyser();
         const nodes: SynthAudioNode[] = this.gridConfig.nodes.map(node =>
             node.type == "Sequencer" ? new SequencerNode(this.audioCtx, node as SynthNodeConfig<SequencerSettings>)
                 : node.type == 'BiquadFilter' ? new BiquadFilterNode(this.audioCtx, node as SynthNodeConfig<BiquadFilterSettings>)
@@ -137,6 +137,14 @@ export class SynthGrid extends React.Component<TProps, any> {
         this.drawConnections();
     };
 
+    onNodeDeletion = (deletedNode: SynthNodeConfig<unknown>) => {
+        this.gridConfig.nodes = this.gridConfig.nodes.filter(node => node.id != deletedNode.id);
+        this.gridConfig.connections = this.gridConfig.connections.filter(conn => conn.fromNodeId != deletedNode.id && conn.toNodeId != deletedNode.id);
+        this.future = [];
+        this.configChanged(this.gridConfig, true);
+        this.drawConnections();
+    };
+
     newNode(type: NodeType) {
         const id = `${type}_${this.gridConfig.nodes.length}`;
         const node = type == "Sequencer" ? SequencerNode.create(id, this.audioCtx)
@@ -183,8 +191,8 @@ export class SynthGrid extends React.Component<TProps, any> {
 
     render() {
         const { gridConfig } = this;
-        return <div style={{width: gridConfig.width, height: gridConfig.height, position: "relative"}} onMouseMove={(e) => this.onMouseMove(e)}>
-            <BackgroundEqualizer analyzer={this.analyzer}/>
+        return <div style={{width: '100%', height: '100%', position: "relative"}} onMouseMove={(e) => this.onMouseMove(e)}>
+            {/*<BackgroundEqualizer analyzer={this.analyzer}/>*/}
             <canvas className={'connector-canvas'} width={gridConfig.width} height={gridConfig.height} ref={canvasEl => this.canvasEl = canvasEl} style={{position: "absolute", zIndex:10}}/>
             <div>
                 {gridConfig.nodes.map(nodeCfg => <SynthNode
@@ -192,6 +200,7 @@ export class SynthGrid extends React.Component<TProps, any> {
                     config={nodeCfg}
                     node={this.nodes[nodeCfg.id]}
                     onChange={this.onNodeChange}
+                    onDelete={this.onNodeDeletion}
                     connector={this.connector}
                 />)}
             </div>
