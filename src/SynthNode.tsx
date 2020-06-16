@@ -30,7 +30,11 @@ interface TProps {
 export class SynthNode extends React.Component<TProps> {
 
     onChange = (config: SynthNodeConfig<unknown>) => {
-        this.props.onChange(config);
+        this.props.onChange({
+            ...config,
+            top: this.props.config.top,
+            left: this.props.config.left
+        });
     };
     onDeletion = () => {
         this.props.onDelete(this.props.config);
